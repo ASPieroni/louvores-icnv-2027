@@ -1,4 +1,4 @@
-const CACHE_NAME = 'icnv-louvores-v1';
+const CACHE_NAME = 'Louvores ICNV';
 const ASSETS = [
   './',
   './index.html',
