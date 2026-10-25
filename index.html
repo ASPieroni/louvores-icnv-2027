@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#142a43"><title>Louvores ICNV — Coletânea 2027</title><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Louvores ICNV"><meta name="mobile-web-app-capable" content="yes"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><link rel="icon" href="icons/icon-192.png" type="image/png">
+<!-- Biblioteca Mammoth.js para extração de HTML/Páginas do Word -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<style>
+/* PALETAS DE CORES CONFIGURÁVEIS */
+:root, [data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0f172a;
+  --panel: #1e293b;
+  --panel2: #334155;
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --accent: #38bdf8;
+  --accent-soft: #0369a1;
+  --line: #334155;
+  --chord: #f43f5e;
+  --shadow: 0 8px 24px rgba(0,0,0,.4);
+  --header-bg: rgba(15,23,42,.96);
+}
+
+[data-theme="verde"] {
+  color-scheme: light;
+  --bg: #f7f9f6;
+  --panel: #ffffff;
+  --panel2: #ecfdf5;
+  --text: #111827;
+  --muted: #4b5563;
+  --accent: #047857;
+  --accent-soft: #d1fae5;
+  --line: #e5e7eb;
+  --chord: #d97706;
+  --shadow: 0 8px 24px rgba(4,120,87,.08);
+  --header-bg: rgba(255,255,255,.96);
+}
+
+[data-theme="roxo"] {
+  color-scheme: light;
+  --bg: #faf5ff;
+  --panel: #ffffff;
+  --panel2: #f3e8ff;
+  --text: #1e1b4b;
+  --muted: #6b7280;
+  --accent: #7c3aed;
+  --accent-soft: #ede9fe;
+  --line: #e9d5ff;
+  --chord: #db2777;
+  --shadow: 0 8px 24px rgba(124,58,237,.08);
+  --header-bg: rgba(255,255,255,.96);
+}
+
+[data-theme="azul-original"] {
+  color-scheme: light;
+  --bg: #f4f7fb;
+  --panel: #ffffff;
+  --panel2: #eaf1ff;
+  --text: #172033;
+  --muted: #64748b;
+  --accent: #2563eb;
+  --accent-soft: #eff6ff;
+  --line: #dbe4f0;
+  --chord: #dc2626;
+  --shadow: 0 8px 24px rgba(15,23,42,.06);
+  --header-bg: rgba(255,255,255,.96);
+}
+
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;transition:background .2s,color .2s}
+header{position:sticky;top:0;z-index:5;background:var(--header-bg);backdrop-filter:blur(12px);padding:16px;box-shadow:0 1px 0 var(--line)}.brand{max-width:900px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}.brand-info{display:flex;align-items:center;gap:12px}.brandmark{width:44px;height:44px;flex:0 0 44px;border-radius:14px;background:linear-gradient(145deg,var(--accent),#60a5fa);display:grid;place-items:center;color:#fff;font-size:23px;box-shadow:0 5px 12px rgba(37,99,235,.2)}
+h1{font-size:19px;letter-spacing:-.35px;margin:0 0 3px;font-weight:800}header p{margin:0;color:var(--muted);font-size:12px}.wrap{padding:16px 14px 28px;max-width:900px;margin:auto}
+
+.theme-switcher{display:flex;gap:6px;align-items:center;background:var(--panel2);padding:4px 8px;border-radius:999px;border:1px solid var(--line)}
+.theme-dot{width:20px;height:20px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:transform .15s}
+.theme-dot:active{transform:scale(.9)}
+.theme-dot.active{border-color:var(--text);transform:scale(1.1)}
+.dot-dark{background:#0f172a}
+.dot-verde{background:#047857}
+.dot-roxo{background:#7c3aed}
+.dot-azul{background:#2563eb}
+
+.search{width:100%;min-width:0;padding:14px 15px;border-radius:14px;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:15px;outline:none;box-shadow:0 2px 5px #0f172a05}.search:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(56,189,248,.3)}.filters{display:flex;gap:7px;margin-top:10px}.filter{border:1px solid var(--line);background:var(--panel);color:var(--muted);border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700}.filter.active{background:var(--accent-soft);border-color:var(--accent);color:var(--text)}
+.songlist{display:flex;flex-direction:column;gap:8px;margin-top:12px;max-height:60vh;overflow:auto;padding:1px 2px 3px}.song{display:flex;align-items:center;gap:10px;width:100%;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:14px;text-align:left;padding:13px 14px;font-size:14px;box-shadow:0 2px 6px #0f172a04;transition:border-color .15s,transform .15s}.song:active{transform:scale(.995)}.song.active{border-color:var(--accent);background:var(--panel2)}.songnum{display:grid;place-items:center;flex:0 0 34px;height:34px;border-radius:11px;background:var(--panel2);color:var(--accent);font-weight:800;font-size:12px}.songinfo{min-width:0;flex:1}.songtitle{font-weight:750;line-height:1.35;overflow-wrap:anywhere;text-transform:uppercase}.song small{display:block;color:var(--muted);margin-top:4px;font-size:11px}.star{border:0;background:transparent;color:#94a3b8;font-size:22px;line-height:1;padding:4px}.star.fav{color:#f59e0b}
+.viewer{position:fixed;top:68px;bottom:0;left:0;right:0;width:100%;max-width:900px;margin:0 auto;background:var(--panel);border:1px solid var(--line);border-bottom:0;border-radius:14px 14px 0 0;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;z-index:4}.songhead{flex:0 0 auto;padding:12px;border-bottom:1px solid var(--line);background:var(--panel2);text-align:center}.toprow{display:flex;align-items:center;justify-content:space-between;gap:8px}.songhead h2{font-size:18px;line-height:1.2;letter-spacing:-.3px;margin:8px 0 6px;color:var(--text);text-align:center}.key{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:var(--panel);color:var(--accent);padding:6px 12px;font-weight:800;font-size:13px;border:1px solid var(--line);margin:0 auto}
+button.action{border:0;border-radius:12px;padding:13px 10px;background:var(--accent);color:#fff;font-weight:800;font-size:14px;box-shadow:0 4px 10px rgba(0,0,0,.15)}button.action:active{transform:translateY(1px)}button.secondary{background:var(--panel);color:var(--text);border:1px solid var(--line);box-shadow:none}.controls{flex:0 0 auto;display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:8px;border-bottom:1px solid var(--line);background:var(--panel2)}.controls button{min-height:40px;padding:9px 6px;font-size:13px}.status{display:none!important}.lyrics{flex:1 1 auto;min-height:0;max-height:none;padding:12px 12px 18px;overflow:auto;overscroll-behavior:contain;background:var(--panel)}.line{font:15px/1.75 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:calc(15px * var(--lyric-zoom,1));white-space:pre;letter-spacing:.5px;min-height:1.75em;width:max-content;min-width:100%;color:var(--text)}.line.chords{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--chord);font-weight:800;position:relative;white-space:pre;height:1.75em;min-width:0}.chord-token{position:absolute;top:0;white-space:pre;color:var(--chord);font-weight:850}.lyric-searchbar{padding:12px 14px 0;background:var(--panel)}.lyric-search{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:11px;background:var(--panel);color:var(--text);font-size:14px;outline:none}.match-count{display:none!important}.empty{padding:24px 16px;color:var(--muted);text-align:center;background:var(--panel);border:1px dashed var(--line);border-radius:14px;margin-top:12px}.foot{font-size:11px;color:var(--muted);padding:14px 5px;text-align:center;line-height:1.5}#back{padding:8px 12px;font-size:13px}.hide{display:none!important}.viewer.focus-lyrics{top:0;left:0;right:0;bottom:0;max-width:none;border:0;border-radius:0;z-index:20}.viewer.focus-lyrics .songhead,.viewer.focus-lyrics .controls{display:none!important}.viewer.focus-lyrics .focus-keybar{display:flex}.viewer.focus-lyrics .lyrics{padding:12px 14px 28px;max-height:none;min-height:0;flex:1 1 auto}.focus-keybar{display:none;flex:0 0 auto;align-items:center;gap:8px;padding:10px 12px;background:var(--bg);border-bottom:1px solid var(--line);flex-wrap:wrap}.focus-key-label{flex:1 0 100%;min-width:0;background:linear-gradient(145deg,var(--accent),#60a5fa);color:#fff;border-radius:10px;padding:10px 12px;font-size:12px;font-weight:750;line-height:1.25;white-space:normal;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.15)}.focus-song-title{font-size:16px;font-weight:800;white-space:normal;overflow-wrap:anywhere;text-align:center}.focus-key-value{font-size:13px;font-weight:650;opacity:.98;text-align:center}.focus-keybar button{flex:1;border:0;border-radius:8px;background:var(--panel2);color:var(--text);font-weight:800;font-size:13px;min-width:0;height:34px;padding:0 9px}.focus-keybar button:active{background:var(--line)}@media(min-width:650px){.songlist{max-height:560px}.controls{grid-template-columns:repeat(4,1fr)}.lyrics{padding:16px 24px}.songhead{padding:12px 16px}}
+
+.action-bar{display:flex;gap:8px;margin-top:10px}
+.add-song-btn{flex:2;border-radius:14px!important;}
+.import-btn{flex:1;background:var(--panel2)!important;color:var(--text)!important;border:1px solid var(--line)!important;border-radius:14px!important;padding:13px 10px;font-weight:800;font-size:14px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 5px #0f172a05;transition:filter .15s}
+.import-btn:active{filter:brightness(0.9)}
+
+.head-actions{display:flex;align-items:center;gap:6px}.icon-btn{padding:7px 10px!important;font-size:15px!important;line-height:1;display:inline-flex;align-items:center;justify-content:center;border-radius:10px!important}.song-modal{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;padding:16px}.song-modal-card{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:16px;padding:18px;width:100%;max-width:620px;max-height:92dvh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.4)}.song-modal-card h2{margin:0 0 16px;font-size:20px;text-align:center}.song-modal-card label{display:block;font-weight:750;font-size:13px;margin:12px 0 6px}.song-modal-card textarea{width:100%;min-height:42vh;resize:vertical;border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--bg);color:var(--text);font:14px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre;tab-size:4}.modal-help{font-size:12px;color:var(--muted);white-space:pre-line;margin:5px 0}.modal-buttons{display:flex;gap:8px;margin-top:12px}.modal-buttons button{flex:1}.song-modal.hide{display:none!important}
+
+/* Estilos da Importação em Lote */
+.batch-preview{max-height:220px;overflow-y:auto;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:8px 12px;margin:10px 0;font-size:13px}
+.batch-item{padding:6px 0;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.batch-item:last-child{border-bottom:none}
+
+#editToggle.editing{background:var(--accent);color:#fff}
+#lyrics.edit-mode .line:not(.chords){outline:1px dashed var(--accent);outline-offset:2px;border-radius:3px;cursor:text}
+#lyrics.edit-mode .chord-token{cursor:pointer;outline:1px dashed var(--chord);outline-offset:2px;border-radius:3px}
+</style></head><body>
+<header>
+  <div class="brand">
+    <div class="brand-info">
+      <div class="brandmark">♫</div>
+      <div><h1>Louvores ICNV — Coletânea 2027</h1></div>
+    </div>
+    <div class="theme-switcher">
+      <div class="theme-dot dot-dark active" onclick="setTheme('dark')" title="Escuro (Palco)"></div>
+      <div class="theme-dot dot-verde" onclick="setTheme('verde')" title="Verde Oliva"></div>
+      <div class="theme-dot dot-roxo" onclick="setTheme('roxo')" title="Roxo & Vinho"></div>
+      <div class="theme-dot dot-azul" onclick="setTheme('azul-original')" title="Azul Original"></div>
+    </div>
+  </div>
+</header>
+<div class="wrap">
+  <input class="search" id="search" placeholder="⌕  Buscar louvor" autocomplete="off" aria-label="Buscar louvor pelo nome ou palavra da letra">
+  
+  <div class="action-bar">
+    <button class="action add-song-btn" id="addSong">＋ Adicionar louvor</button>
+    <label class="action import-btn" title="Importar arquivo Word com 1 louvor por página">
+      📄 Importar .docx
+      <input type="file" id="docxInput" accept=".docx" style="display:none">
+    </label>
+  </div>
+
+  <div id="catalog">
+    <div class="filters">
+      <button class="filter active" id="allFilter">Todos os louvores</button>
+      <button class="filter" id="favFilter">★ Favoritos</button>
+    </div>
+    <div class="songlist" id="songlist"></div>
+  </div>
+  <section class="viewer hide" id="viewer">
+    <div class="songhead">
+      <div class="toprow">
+        <button class="action secondary" id="back">← Lista</button>
+        <div class="head-actions">
+          <button class="action secondary icon-btn" id="editSong" title="Editar cadastro">✏️</button>
+          <button class="action secondary icon-btn" id="deleteSong" title="Excluir louvor">🗑️</button>
+          <button class="star" id="songFav" aria-label="Adicionar aos favoritos">☆</button>
+        </div>
+      </div>
+      <h2 id="title"></h2>
+      <div class="key" id="key"></div>
+    </div>
+    <div class="focus-keybar" id="focusKeybar">
+      <div class="focus-key-label">
+        <span class="focus-song-title" id="focusSongTitle">Nome do louvor</span>
+        <span class="focus-key-value" id="focusKey">Tom: —</span>
+      </div>
+      <button type="button" id="editToggle" aria-pressed="false">✏️ Editar</button>
+      <button type="button" id="focusZoomOut" aria-label="Diminuir tamanho da cifra">A−</button>
+      <button type="button" id="focusZoomIn" aria-label="Aumentar tamanho da cifra">A+</button>
+      <button type="button" id="focusDown" aria-label="Baixar meio tom">− Tom</button>
+      <button type="button" id="focusReset" aria-label="Voltar ao tom original">↺ Tom</button>
+      <button type="button" id="focusUp" aria-label="Subir meio tom">+ Tom</button>
+    </div>
+    <div class="controls">
+      <button class="action" id="down">− Meio tom</button>
+      <button class="action" id="up">+ Meio tom</button>
+      <button class="action secondary" id="reset">↺ Tom original</button>
+      <button class="action secondary" id="copy">▣ Copiar cifra</button>
+    </div>
+    <div class="status hide" id="status" aria-hidden="true"></div>
+    <div class="lyrics" id="lyrics"></div>
+  </section>
+</div>
+
+<!-- Modal Edição / Adição Manual -->
+<div class="song-modal hide" id="songModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="song-modal-card">
+    <h2 id="modalTitle">Adicionar louvor</h2>
+    <label for="songName">Nome do louvor</label>
+    <input id="songName" class="search" maxlength="180" placeholder="Digite o título">
+    <label for="songLyrics">Letra e cifras</label>
+    <p class="modal-help">Digite as cifras em linhas próprias, acima da letra, mantendo os espaços.</p>
+    <textarea id="songLyrics" spellcheck="false" placeholder="Cole ou digite a letra e as cifras aqui"></textarea>
+    <div class="modal-buttons">
+      <button class="action secondary" id="cancelSong">Cancelar</button>
+      <button class="action" id="saveSong">Salvar louvor</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Confirmação de Importação em Lote -->
+<div class="song-modal hide" id="batchModal" role="dialog" aria-modal="true">
+  <div class="song-modal-card">
+    <h2>Importar Louvores do Word</h2>
+    <p id="batchSummary" style="font-size:14px; color:var(--muted); margin-bottom:10px;"></p>
+    <div class="batch-preview" id="batchList"></div>
+    <div class="modal-buttons">
+      <button class="action secondary" id="cancelBatch">Cancelar</button>
+      <button class="action" id="confirmBatch">Confirmar e Cadastrar Todos</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Conteúdo incorporado do songs.js
+var songs = [
+  {"id":0,"number":1,"title":"AO ÚNICO","lines":["Aline Barros","Composição de: Bené Gomes","Tom: D","","[Intro] G A F# Bm7 Em7 G A D"," G A D G A","","[Primeira Parte]"," D A/C# Bm7 Bm7/A","Ao único que é digno de receber"," G D/F#","A honra e a glória"," Em7 A","A força e o poder","","[Segunda Parte]"," Am7 D","Ao rei, eterno, imortal","G Gm","Invisível, mas real"," D/A A D 1ª VEZ: G A","Ele ministramos o louvor 2ª VEZ: A/C#","","[Refrão]"," Bm7 F#m7 G A D A/C#","Coroa__mos a Ti, ó rei Jesus"," Bm7 F#m7 G A","Coroa__mos a Ti, ó rei Jesus"," G G/A","Adoramos o Teu nome"," F# Bm","Nos rendemos aos Teus pés"," Em7 A A7 D","Consagramos todo nosso ser a Ti","","( A/C# Bm7 Bm7/A G D/F# )","( F Eb/G E/G# A4 A )"]},
+  {"id":1,"number":2,"title":"HOSANA","lines":["Tom: G","","[Intro] G D Em C","","[Verso 1]","G","Vejo o Rei da Glória","Em","Vindo com as nuvens na terra","C D","Todo joelho se dobrará","G","Vejo a Sua graça","Em","Os pecados perdoados","C D","Cantamos com alegria"]},
+  {"id":2,"number":3,"title":"GRANDE É O SENHOR","lines":["Tom: C","","[Verso]","C F G C","Grande é o Senhor e mui digno de louvor","C F G C","Na cidade do nosso Deus, seu santo monte","Am Dm G C","Alegria de toda a terra é o monte Sião","Am Dm G C","Lados do norte, a cidade do grande Rei"]},
+  {"id":3,"number":4,"title":"TE LOUVAREi, MEU DEUS","lines":["Tom: D","","[Verso]","D A Bm G","Te louvarei, meu Deus, de todo o coração","D A Bm G","Cantarei louvores diante dos anjos","D A Bm G","Prostrar-me-ei em direção ao teu santo templo","D A G D","E louvarei o teu nome pela tua bondade"]},
+  {"id":4,"number":5,"title":"MEU TUDO","lines":["Tom: A","","[Verso]","A E F#m D","Tu és a minha força, meu escudo e meu abrigo","A E F#m D","Em ti confio e me alegro em teu amor","A E F#m D","Minha vida entrego em tuas mãos, Senhor","A E D A","Tu és o meu tudo, para sempre amém"]},
+  {"id":5,"number":6,"title":"REINA EM MIM","lines":["Tom: G","","[Verso]","G D C D","Sobre a terra e os céus reina o Senhor","G D C D","Com poder e glória, com imenso amor","G D C D","Tua mão estendida vem nos guiar","C D G","Reina em nós para sempre"]},
+  {"id":6,"number":7,"title":"CANTO DE ALEGRIA","lines":["Tom: E","","[Verso]","E B C#m A","Cantai ao Senhor um cântico novo","E B C#m A","Porque ele tem feito maravilhas","E B C#m A","A sua destra e o seu braço santo","E B A E","Nos trouxeram a salvação"]},
+  {"id":7,"number":8,"title":"SANTO É O SENHOR","lines":["Tom: D","","[Verso]","D G A D","Santo, santo, santo é o Senhor dos Exércitos","D G A D","Toda a terra está cheia da sua glória","Bm G A D","Hosana nas alturas, bendito o que vem","Bm G A D","Em nome do Senhor, nosso Salvador"]},
+  {"id":8,"number":9,"title":"AO REI DOS REIS","lines":["Tom: C","","[Verso]","C Am F G","Ao Rei dos reis, ao Deus de amor","C Am F G","Rendemos glória, honra e louvor","C Am F G","Tua presença é o nosso prazer","C F G C","Rei da glória, és o nosso bem"]},
+  {"id":9,"number":10,"title":"LÂMPADA PARA OS MEUS PÉS","lines":["Tom: G","","[Verso]","G C D G","Lâmpada para os meus pés é a tua palavra","G C D G","E luz para o meu caminho, ó Senhor","Em C D G","Guia-me nos teus passos, faz-me caminhar","Em C D G","Na verdade e na justiça do teu amor"]},
+  {"id":10,"number":11,"title":"CÉUS DECLARAM","lines":["Tom: A","","[Verso]","A E F#m D","Os céus declaram a glória de Deus","A E F#m D","E o firmamento anuncia a obra das suas mãos","A E F#m D","Dia após dia profere a palavra","A E D A","E noite após noite revela o saber"]},
+  {"id":11,"number":12,"title":"O MEU LOUVOR É FRUTO","lines":["Tom: D","","[Verso]","D G A D","O meu louvor é fruto do que tu és em mim","D G A D","Senhor, eu te adoro por tua infinita graça","Bm G A D","Não há outro Deus como tu, soberano e fiel","Bm G A D","Recebe a minha adoração, ó Emanuel"]},
+  {"id":12,"number":13,"title":"ALEGRIAS DO MEU CORAÇÃO","lines":["Tom: C","","[Verso]","C Am F G","Alegrias transbordam no meu coração","C Am F G","Quando estou na tua casa em comunhão","C Am F G","Louvemos o nome do nosso Criador","C F G C","Fonte de vida, paz e eterno amor"]},
+  {"id":13,"number":14,"title":"PODEROSO DEUS","lines":["Tom: G","","[Verso]","G D Em C","Poderoso Deus, Pai da eternidade","G D Em C","Príncipe da paz, Deus forte e fiel","G D Em C","Tua presença é tudo o que eu preciso","C D G","Para viver e vencer neste mundo"]},
+  {"id":14,"number":15,"title":"QUE SE ABRAM OS CÉUS","lines":["Tom: D","","[Verso]","D G Bm A","Que se abram os céus sobre este lugar","D G Bm A","Manifesta a tua glória e o teu poder","G D Em A","Queremos ver a tua face resplandecer","G A D","Em nosso meio, ó Pai de amor"]},
+  {"id":15,"number":16,"title":"FESTA NO CÉU","lines":["Tom: C","","[Verso]","C F G C","Há festa no céu quando um pecador se converte","C F G C","Os anjos se alegram cantando louvores","Am Dm G C","Celebremos também a graça infinita","Am Dm G C","Do nosso Senhor e Salvador Jesus"]},
+  {"id":16,"number":17,"title":"MARAVILHOSA GRAÇA","lines":["Tom: G","","[Verso]","G C G D","Maravilhosa graça que excede o meu pecado","G C G D","Como expressar a altura e a profundidade dela","Em C G D","Cantarei para sempre o teu sublime amor","Em C G D","Que me resgatou e me deu a liberdade"]}
+];
+
+function setTheme(name){
+  document.documentElement.setAttribute('data-theme', name);
+  document.querySelectorAll('.theme-dot').forEach(d => d.classList.remove('active'));
+  const activeDot = document.querySelector(`.dot-${name === 'azul-original' ? 'azul' : name}`);
+  if(activeDot) activeDot.classList.add('active');
+  try{ localStorage.setItem('icnv_theme', name); }catch(e){}
+}
+(function(){
+  const saved = localStorage.getItem('icnv_theme') || 'dark';
+  setTheme(saved);
+})();
+
+if (typeof songs === 'undefined') {
+  songs = [];
+}
+
+try { const storedCatalog=localStorage.getItem('icnv_catalog_v1'); if(storedCatalog){const parsed=JSON.parse(storedCatalog);if(Array.isArray(parsed)&&parsed.every(x=>x&&Number.isFinite(x.id)&&typeof x.title==='string'&&Array.isArray(x.lines)))songs=parsed;} } catch(e) {}
+function persistCatalog(){try{localStorage.setItem('icnv_catalog_v1',JSON.stringify(songs));return true;}catch(e){alert('Não foi possível salvar.');return false;}}
+
+const NOTES=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+let selected=null, shift=0;
+const $=id=>document.getElementById(id);
+function rootIndex(n){const map={'C':0,'B#':0,'C#':1,'Db':1,'D':2,'D#':3,'Eb':3,'E':4,'Fb':4,'E#':5,'F':5,'F#':6,'Gb':6,'G':7,'G#':8,'Ab':8,'A':9,'A#':10,'Bb':10,'B':11,'Cb':11};return map[n]??-1}
+function transNote(note,steps){let i=rootIndex(note);if(i<0)return note;return NOTES[((i+steps)%12+12)%12]}
+function chordToken(tok){let clean=tok.replace(/^[([{]+|[)\]},;]+$/g,&#39;&#39;); if(!clean)return null;
+ let m=clean.match(/^([A-G](?:#|b)?)(.*)$/); if(!m)return null;
+ let rest=m[2];
+ if(rest.includes(&#39;/&#39;)){let parts=rest.split(&#39;/&#39;);if(parts.length===2 && /^[A-G](?:#|b)?$/.test(parts[1])){rest=parts[0]+&#39;/&#39;+parts[1]}else if(parts.length>2)return null;}
+ const suffix=rest.split(&#39;/&#39;)[0];
+ if(!/^(?:|m|M|maj|maj7|maj9|mmaj7|m7|m9|m6|m7b5|dim|dim7|aug|aug7|sus|sus2|sus4|add2|add4|add9|5|6|7|9|11|13|4|7M|7\(4\)|7\(9\)|9\)|º|°|o|#?\d+|\d+M|\d+\(\d+\)|m\(\d+\)|7b9|7#9|7sus4|7sus2|madd9|6\/9|7\/\d+|\(.*\))*$/i.test(suffix))return null;
+ return {clean,root:m[1],rest};
+}
+function transposeToken(tok,steps){let prefix=(tok.match(/^[([{]+/)||[''])[0], suffix=(tok.match(/[)\]},;]+$/)||[''])[0];let core=tok.slice(prefix.length,tok.length-suffix.length);let c=chordToken(core);if(!c)return tok;
+ let rest=c.rest;
+ let slash=rest.match(/^(.*)\/([A-G](?:#|b)?)$/);
+ if(slash) rest=slash[1]+'/'+transNote(slash[2],steps);
+ return prefix+transNote(c.root,steps)+rest+suffix;
+}
+function looksLikeChordLine(line){let s=line.trim();if(!s)return false;
+ if(/^Tom\s*:/i.test(s))return true;
+ if(/^Notas\s*:/i.test(s))return false;
+ let cleaned=s.replace(/\[(?:Intro|Refrão|Refr[aã]o|Primeira Parte|Segunda Parte|Pré-Refrão|Final|Ponte|Instrumental|Repetir[^\]]*)\]/ig,' ').replace(/\b(?:Intro|Final)\b/ig,' ').replace(/\d+ª?\s*VEZ:?/ig,' ').replace(/\b(?:BACK|Notas):?/ig,' ').replace(/[()\[\]{}|,:;.!–—-]/g,' ');
+ let toks=cleaned.split(/\s+/).filter(Boolean); if(!toks.length)return false;
+ let chordCount=toks.filter(t=>!!chordToken(t)).length;
+ return chordCount>0 && (chordCount===toks.length || chordCount>=2 && chordCount/toks.length>=0.45);
+}
+function transLine(line,steps){
+ if(/^\s*Tom\s*:/i.test(line)) return line.replace(/(Tom\s*:\s*)([A-G](?:#|b)?m?)/i,(all,prefix,n)=>prefix+transposeKeyName(n,steps));
+ if(!looksLikeChordLine(line))return line;
+ return line.replace(/(?<![A-Za-zÀ-ÿ0-9])([A-G](?:#|b)?(?:maj7|maj9|mmaj7|m7b5|m7|m9|m6|madd9|dim7|dim|aug7|sus2|sus4|sus|add9|add2|add4|7sus4|7sus2|7b9|7#9|7M|13|11|9|7|6|5|4|M|m|º|°|o)?(?:\([^\s)]*\))?(?:\/[A-G](?:#|b)?)?)(?![A-Za-zÀ-ÿ0-9])/g,(tok)=>transposeToken(tok,steps));
+}
+function transposeKeyName(k,steps){let m=k.match(/^([A-G](?:#|b)?)(m?)$/i);if(!m)return k;return transNote(m[1],steps)+m[2]}
+function currentLines(){return selected.lines.map(l=>transLine(l,shift))}
+function keyFromLines(lines){for(let l of lines){let m=l.match(/^\s*Tom\s*:/i);if(m)return m[1]}return 'Tom não informado'}
+let favorites=new Set();try{favorites=new Set(JSON.parse(localStorage.getItem('icnv_favorites')||'[]'))}catch(e){}
+let showFavorites=false, lyricZoom=1;
+function saveFavorites(){try{localStorage.setItem('icnv_favorites',JSON.stringify([...favorites]))}catch(e){}}
+function toggleFavorite(id){if(favorites.has(id))favorites.delete(id);else favorites.add(id);saveFavorites();renderCatalog();if(selected)renderFavoriteButton()}
+function renderFavoriteButton(){let b=$('songFav');if(!selected||!b)return;let is=favorites.has(selected.id);b.textContent=is?'★':'☆';b.classList.toggle('fav',is)}
+function renderCatalog(){let q=normalizeSearch($('search').value);let list=$('songlist');list.innerHTML='';let shown=0;
+ songs.forEach((s,i)=>{const titleMatch=normalizeSearch(String(s.number)+' '+s.title).includes(q);const lyricMatch=!!q&&s.lines.some(line=>normalizeSearch(searchableLyricText(line)).includes(q));if(q&&!titleMatch&&!lyricMatch)return;if(showFavorites&&!favorites.has(s.id))return;shown++;let b=document.createElement('button');b.className='song';b.innerHTML='<span class="songnum">'+esc(String(s.number).padStart(2,'0'))+'</span><span class="songinfo"><span class="songtitle">'+esc(s.title)+'</span><small>'+s.lines.length+' linhas · '+(favorites.has(s.id)?'Favorito':'Louvor cifrado')+'</small></span><span class="star '+(favorites.has(s.id)?'fav':'')+'">'+(favorites.has(s.id)?'★':'☆')+'</span>';b.onclick=()=>openSong(i);b.querySelector('.star').onclick=(e)=>{e.stopPropagation();toggleFavorite(s.id)};list.appendChild(b)});
+ $('allFilter').classList.toggle('active',!showFavorites);$('favFilter').classList.toggle('active',showFavorites)}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function openSong(i){selected=songs[i];editMode=false;$('editToggle').classList.remove('editing');$('editToggle').textContent='✏️ Editar';shift=0;lyricZoom=1;$('lyrics').style.setProperty('--lyric-zoom',lyricZoom);$('catalog').classList.add('hide');$('viewer').classList.remove('hide');$('title').textContent=selected.number+'. '+selected.title;renderFavoriteButton();renderSong();}
+function renderAlignedChordLine(originalLine, step){
+ const div=document.createElement('div');div.className='line chords';
+ const tokens=[...originalLine.matchAll(/\S+/g)];
+ const style=getComputedStyle(div);
+ const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d');ctx.font=`${style.fontSize} ${style.fontFamily}`;
+ const measure=(txt)=>ctx.measureText(txt).width + txt.length*0.5;
+ div.style.width=`${Math.max(measure(originalLine),1)}px`;div.style.minWidth=`${Math.max(measure(originalLine),1)}px`;
+ let previousRight=0; const minGap=17;
+ tokens.forEach(m=>{
+ const chord=transposeToken(m[0],step);
+ const wanted=measure(originalLine.slice(0,m.index));
+ const x=Math.max(wanted, previousRight+minGap);
+ const span=document.createElement('span');span.className='chord-token';span.style.left=`${x}px`;span.textContent=chord;div.appendChild(span);
+ previousRight=x+ctx.measureText(chord).width+2;
+ div.style.width=`${Math.max(parseFloat(div.style.width)||0,previousRight)}px`;
+ div.style.minWidth=div.style.width;
+ });
+ if(!tokens.length)div.textContent=' ';
+ return div;
+}
+function normalizeSearch(text){return String(text).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('pt-BR').trim()}
+function searchableLyricText(line){let text=String(line).replace(/\[(?:Intro|Refrão|Refr[aã]o|Primeira Parte|Segunda Parte|Pré-Refrão|Final|Ponte|Instrumental|Repetir[^\]]*)\]/ig,' ');if(/^\s*Tom\s*:/i.test(text)||/^\s*Notas\s*:/i.test(text))return '';return text.split(/\s+/).filter(Boolean).filter(t=>!chordToken(t)).join(' ')}
+let editMode=false;
+function saveCurrentSongEdits(){if(!selected)return;const i=songs.findIndex(s=>s.id===selected.id);if(i>=0)songs[i]=selected;persistCatalog();renderCatalog();}
+function startDirectEditing(){editMode=!editMode;$('editToggle').classList.toggle('editing',editMode);$('editToggle').textContent=editMode?'✓ Concluir':'✏️ Editar';$('lyrics').classList.toggle('edit-mode',editMode);}
+$('editToggle').addEventListener('click',startDirectEditing);
+$('lyrics').addEventListener('click',e=>{if(!editMode||!selected)return;const chord=e.target.closest('.chord-token');if(chord){const lineEl=chord.parentElement;const chordEls=[...lineEl.querySelectorAll('.chord-token')];const idx=[...$('lyrics').children].indexOf(lineEl);if(idx<0)return;const raw=selected.lines[idx];const current=chord.textContent;const answer=prompt('Novo acorde:',current);if(answer===null||!answer.trim())return;const originalTokens=[...raw.matchAll(/\S+/g)];const tokenIndex=chordEls.indexOf(chord);if(originalTokens[tokenIndex]){const m=originalTokens[tokenIndex];selected.lines[idx]=raw.slice(0,m.index)+answer.trim()+raw.slice(m.index+m[0].length);saveCurrentSongEdits();renderSong();$('lyrics').classList.add('edit-mode');}return;}const line=e.target.closest('.line:not(.chords)');if(!line)return;const idx=[...$('lyrics').children].indexOf(line);if(idx<0)return;const raw=selected.lines[idx];if(/^\s*Tom\s*:/i.test(raw))return;const answer=prompt('Editar texto da linha:',raw);if(answer===null)return;selected.lines[idx]=answer;saveCurrentSongEdits();renderSong();$('lyrics').classList.add('edit-mode');});
+let editingSongId=null;
+function openSongForm(song=null){editingSongId=song?song.id:null;$('modalTitle').textContent=song?'Editar cadastro do louvor':'Adicionar louvor';$('songName').value=song?song.title:'';$('songLyrics').value=song?song.lines.join('\n'):'';$('saveSong').textContent=song?'Salvar alterações':'Salvar louvor';$('songModal').classList.remove('hide');}
+function closeSongForm(){$('songModal').classList.add('hide');editingSongId=null;}
+$('addSong').addEventListener('click',()=>openSongForm());$('cancelSong').addEventListener('click',closeSongForm);
+
+// IMPORTAÇÃO MULTI-PÁGINAS DO WORD (.DOCX)
+let parsedBatchSongs = [];
+
+$('docxInput').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(event) {
+    const arrayBuffer = event.target.result;
+    
+    mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
+      .then(function(result) {
+        const html = result.value;
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
+
+        let pageTexts = [];
+        let currentPage = [];
+
+        tempDiv.childNodes.forEach(node => {
+          const isPageBreak = node.outerHTML && (
+            node.outerHTML.includes('page-break') || 
+            node.outerHTML.includes('break-before') ||
+            node.style?.pageBreakBefore === 'always'
+          );
+
+          if (isPageBreak && currentPage.length > 0) {
+            pageTexts.push(currentPage.join('\n').trim());
+            currentPage = [];
+          } else {
+            const text = node.textContent || '';
+            if (text.trim()) currentPage.push(text);
+          }
+        });
+
+        if (currentPage.length > 0) {
+          pageTexts.push(currentPage.join('\n').trim());
+        }
+
+        if (pageTexts.length === 1) {
+          pageTexts = pageTexts[0].split(/\n\s*\n\s*\n/).filter(p => p.trim());
+        }
+
+        parsedBatchSongs = [];
+        pageTexts.forEach(pageContent => {
+          const lines = pageContent.split('\n').map(l => l.trimEnd()).filter(l => l !== '');
+          if (lines.length > 0) {
+            const title = lines[0].trim();
+            const songLines = lines.slice(1);
+            if (title) {
+              parsedBatchSongs.push({
+                title: title.toLocaleUpperCase('pt-BR'),
+                lines: songLines.length > 0 ? songLines : [title]
+              });
+            }
+          }
+        });
+
+        if (parsedBatchSongs.length === 0) {
+          alert('Nenhum louvor foi identificado no arquivo.');
+          return;
+        }
+
+        $('batchSummary').textContent = `${parsedBatchSongs.length} louvor(es) encontrado(s) no arquivo Word:`;
+        const listDiv = $('batchList');
+        listDiv.innerHTML = '';
+        parsedBatchSongs.forEach((s, idx) => {
+          const item = document.createElement('div');
+          item.className = 'batch-item';
+          item.innerHTML = `<span><strong>${idx + 1}.</strong> ${esc(s.title)}</span><small style="color:var(--muted)">${s.lines.length} linhas</small>`;
+          listDiv.appendChild(item);
+        });
+
+        $('batchModal').classList.remove('hide');
+        $('docxInput').value = '';
+      })
+      .catch(function(err) {
+        alert('Erro ao ler o arquivo Word: ' + err.message);
+      });
+  };
+  reader.readAsArrayBuffer(file);
+});
+
+$('cancelBatch').addEventListener('click', () => {
+  $('batchModal').classList.add('hide');
+  parsedBatchSongs = [];
+});
+
+$('confirmBatch').addEventListener('click', () => {
+  if (parsedBatchSongs.length === 0) return;
+
+  parsedBatchSongs.forEach(s => {
+    const id = songs.reduce((m, item) => Math.max(m, Number(item.id) || 0), -1) + 1;
+    const number = songs.reduce((m, item) => Math.max(m, Number(item.number) || 0), 0) + 1;
+    songs.push({
+      id,
+      number,
+      title: s.title,
+      lines: s.lines
+    });
+  });
+
+  if (persistCatalog()) {
+    renderCatalog();
+    $('batchModal').classList.add('hide');
+    alert(`${parsedBatchSongs.length} louvores cadastrados com sucesso!`);
+    parsedBatchSongs = [];
+  }
+});
+
+$('saveSong').addEventListener('click',()=>{const title=$('songName').value.trim();const body=$('songLyrics').value.replace(/\r/g,'').trim();if(!title){alert('Digite o nome.');return;}if(!body){alert('Digite a letra.');return;}const lines=body.split('\n');if(editingSongId!==null){const i=songs.findIndex(s=>s.id===editingSongId);if(i>=0)songs[i]={...songs[i],title:title.toLocaleUpperCase('pt-BR'),lines};if(selected&&selected.id===editingSongId)selected=songs[i];}else{const id=songs.reduce((m,s)=>Math.max(m,Number(s.id)||0),-1)+1;const number=songs.reduce((m,s)=>Math.max(m,Number(s.number)||0),0)+1;songs.push({id,number,title:title.toLocaleUpperCase('pt-BR'),lines});}if(!persistCatalog())return;closeSongForm();renderCatalog();if(selected&&!$('viewer').classList.contains('hide')){const index=songs.findIndex(s=>s.id===selected.id);if(index>=0){selected=songs[index];renderSong();}}alert('Salvo com sucesso!');});
+$('editSong').addEventListener('click',()=>{if(selected)openSongForm(selected);});
+$('deleteSong').addEventListener('click',()=>{if(!selected)return;if(!confirm('Excluir o louvor “'+selected.title+'”?'))return;songs=songs.filter(s=>s.id!==selected.id);favorites.delete(selected.id);saveFavorites();persistCatalog();selected=null;$('viewer').classList.add('hide');$('catalog').classList.remove('hide');renderCatalog();});
+$('songModal').addEventListener('click',e=>{if(e.target===$('songModal'))closeSongForm();});
+function renderSong(){let lines=currentLines();$('key').textContent=keyFromLines(lines);$('focusSongTitle').textContent=selected.title;$('focusKey').textContent=keyFromLines(lines).replace(/^Tom\s*:/i,'Tom:');let root=$('lyrics');root.style.setProperty('--lyric-zoom',lyricZoom);root.innerHTML='';let previousWasBlank=false;selected.lines.forEach((original,i)=>{const isBlank=!String(original).trim();if(isBlank&&previousWasBlank)return;previousWasBlank=isBlank;let line=lines[i]??original;let div;if(looksLikeChordLine(original)&&!/^\s*Tom\s*:/i.test(original)){div=renderAlignedChordLine(original,shift)}else{div=document.createElement('div');div.className='line';div.textContent=line||' ';}root.appendChild(div)});};
+
+let touchStartX = 0, touchStartY = 0;
+$('viewer').addEventListener('touchstart', e => {
+  touchStartX = e.changedTouches[0].screenX;
+  touchStartY = e.changedTouches[0].screenY;
+}, {passive: true});
+
+$('viewer').addEventListener('touchend', e => {
+  let touchEndX = e.changedTouches[0].screenX;
+  let touchEndY = e.changedTouches[0].screenY;
+  let diffX = touchEndX - touchStartX;
+  let diffY = Math.abs(touchEndY - touchStartY);
+  if (diffX > 80 && diffY < 60) {
+    $('viewer').classList.remove('focus-lyrics');
+    $('viewer').classList.add('hide');
+    $('catalog').classList.remove('hide');
+    renderCatalog();
+  }
+}, {passive: true});
+
+$('lyrics').addEventListener('dblclick',()=>{$('viewer').classList.toggle('focus-lyrics')});
+$('focusUp').onclick=()=>{shift++;renderSong()};$('focusDown').onclick=()=>{shift--;renderSong()};$('focusReset').onclick=()=>{shift=0;renderSong()};
+$('focusZoomIn').onclick=()=>{lyricZoom=Math.min(2,Math.round((lyricZoom+0.1)*10)/10);renderSong()};$('focusZoomOut').onclick=()=>{lyricZoom=Math.max(0.8,Math.round((lyricZoom-0.1)*10)/10);renderSong()};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('viewer').classList.remove('focus-lyrics')});
+$('search').addEventListener('input',()=>{if(!$('viewer').classList.contains('hide')){$('viewer').classList.add('hide');$('catalog').classList.remove('hide')}selected=null;renderCatalog()});$('allFilter').onclick=()=>{showFavorites=false;renderCatalog()};$('favFilter').onclick=()=>{showFavorites=true;renderCatalog()};$('songFav').onclick=()=>{if(selected)toggleFavorite(selected.id)};$('up').onclick=()=>{shift++;renderSong()};$('down').onclick=()=>{shift--;renderSong()};$('reset').onclick=()=>{shift=0;renderSong()};$('back').onclick=()=>{$('viewer').classList.add('hide');$('catalog').classList.remove('hide');renderCatalog()};$('copy').onclick=()=>{let text=$('title').textContent+'\n'+currentLines().join('\n');if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).catch(()=>{})}else{let ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(e){}ta.remove()}};
+renderCatalog();
+</script></body></html>
