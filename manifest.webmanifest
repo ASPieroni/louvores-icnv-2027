@@ -1,29 +1,33 @@
 {
+  "id": "./",
   "name": "Louvores ICNV — Coletânea 2027",
   "short_name": "Louvores ICNV",
-  "description": "Coletânea e cifras de louvores ICNV para utilização em culto e ensaios.",
-  "start_url": "./index.html",
+  "description": "Coletânea de louvores da ICNV com cifras e transposição de tons.",
+  "lang": "pt-BR",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#0f172a",
   "theme_color": "#142a43",
-  "orientation": "portrait-primary",
   "icons": [
     {
       "src": "icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "icons/apple-touch-icon.png",
-      "sizes": "180x180",
-      "type": "image/png"
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
