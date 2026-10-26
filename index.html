@@ -119,7 +119,7 @@ button.action{border:0;border-radius:12px;padding:13px 10px;background:var(--acc
     <button class="action add-song-btn" id="addSong">＋ Adicionar louvor</button>
     <label class="action import-btn" title="Importar arquivo Word com 1 louvor por página">
       📄 Importar .docx
-      <input type="file" id="docxInput" accept=".docx" style="display:none">
+      <input type="file" id="docxInput" accept=".docx" multiple style="display:none">
     </label>
   </div>
 
@@ -215,6 +215,8 @@ if (typeof songs === 'undefined') {
 }
 
 try { const storedCatalog=localStorage.getItem('icnv_catalog_v1'); if(storedCatalog){const parsed=JSON.parse(storedCatalog);if(Array.isArray(parsed)&&parsed.every(x=>x&&Number.isFinite(x.id)&&typeof x.title==='string'&&Array.isArray(x.lines))){const savedTitles=new Set(parsed.map(x=>String(x.title).trim().toLocaleUpperCase('pt-BR')));songs=songs.filter(x=>!savedTitles.has(String(x.title).trim().toLocaleUpperCase('pt-BR'))).concat(parsed);}} } catch(e) {}
+function sortSongsAlphabetically(){songs.sort((a,b)=>String(a.title||'').localeCompare(String(b.title||''),'pt-BR',{sensitivity:'base',ignorePunctuation:true}));}
+sortSongsAlphabetically();
 function persistCatalog(){try{localStorage.setItem('icnv_catalog_v1',JSON.stringify(songs));return true;}catch(e){alert('Não foi possível salvar.');return false;}}
 
 const NOTES=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
@@ -294,93 +296,119 @@ function openSongForm(song=null){editingSongId=song?song.id:null;$('modalTitle')
 function closeSongForm(){$('songModal').classList.add('hide');editingSongId=null;}
 $('addSong').addEventListener('click',()=>openSongForm());$('cancelSong').addEventListener('click',closeSongForm);
 
-// IMPORTAÇÃO MULTI-PÁGINAS DO WORD (.DOCX)
+// IMPORTAÇÃO DE UM OU VÁRIOS DOCUMENTOS WORD (.DOCX)
 let parsedBatchSongs = [];
+let skippedBatchDuplicates = 0;
 
-$('docxInput').addEventListener('change', function(e) {
-  const file = e.target.files[0];
-  if (!file) return;
+function normalizeImportedTitle(title) {
+  return String(title || '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .toLocaleUpperCase('pt-BR')
+    .replace(/^\s*(?:N[º°.]?\s*)?\d+\s*[-.)–—:]\s*/, '')
+    .replace(/[^A-Z0-9]+/g, ' ')
+    .trim();
+}
 
-  const reader = new FileReader();
-  reader.onload = function(event) {
-    const arrayBuffer = event.target.result;
-    
-    mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
-      .then(function(result) {
-        const html = result.value;
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = html;
-
-        let pageTexts = [];
-        let currentPage = [];
-
-        tempDiv.childNodes.forEach(node => {
-          const isPageBreak = node.outerHTML && (
-            node.outerHTML.includes('page-break') || 
-            node.outerHTML.includes('break-before') ||
-            node.style?.pageBreakBefore === 'always'
-          );
-
-          if (isPageBreak && currentPage.length > 0) {
-            pageTexts.push(currentPage.join('\n').trim());
-            currentPage = [];
-          } else {
-            const text = node.textContent || '';
-            if (text.trim()) currentPage.push(text);
+function readDocxFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('Não foi possível ler ' + file.name));
+    reader.onload = event => {
+      mammoth.convertToHtml({ arrayBuffer: event.target.result })
+        .then(result => {
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = result.value;
+          let pageTexts = [];
+          let currentPage = [];
+          tempDiv.childNodes.forEach(node => {
+            const isPageBreak = node.outerHTML && (
+              node.outerHTML.includes('page-break') ||
+              node.outerHTML.includes('break-before') ||
+              node.style?.pageBreakBefore === 'always'
+            );
+            if (isPageBreak && currentPage.length > 0) {
+              pageTexts.push(currentPage.join('\n').trim());
+              currentPage = [];
+            } else {
+              const text = node.textContent || '';
+              if (text.trim()) currentPage.push(text);
+            }
+          });
+          if (currentPage.length > 0) pageTexts.push(currentPage.join('\n').trim());
+          if (pageTexts.length === 1) {
+            pageTexts = pageTexts[0].split(/\n\s*\n\s*\n/).filter(part => part.trim());
           }
-        });
-
-        if (currentPage.length > 0) {
-          pageTexts.push(currentPage.join('\n').trim());
-        }
-
-        if (pageTexts.length === 1) {
-          pageTexts = pageTexts[0].split(/\n\s*\n\s*\n/).filter(p => p.trim());
-        }
-
-        parsedBatchSongs = [];
-        pageTexts.forEach(pageContent => {
-          const lines = pageContent.split('\n').map(l => l.trimEnd()).filter(l => l !== '');
-          if (lines.length > 0) {
-            const title = lines[0].trim();
-            const songLines = lines.slice(1);
-            if (title) {
-              parsedBatchSongs.push({
+          const found = [];
+          pageTexts.forEach(pageContent => {
+            const lines = pageContent.split('\n').map(line => line.trimEnd()).filter(line => line !== '');
+            if (lines.length > 0) {
+              const title = lines[0].trim();
+              const songLines = lines.slice(1);
+              if (title) found.push({
                 title: title.toLocaleUpperCase('pt-BR'),
                 lines: songLines.length > 0 ? songLines : [title]
               });
             }
-          }
-        });
+          });
+          resolve({ fileName: file.name, songs: found });
+        })
+        .catch(reject);
+    };
+    reader.readAsArrayBuffer(file);
+  });
+}
 
-        if (parsedBatchSongs.length === 0) {
-          alert('Nenhum louvor foi identificado no arquivo.');
+$('docxInput').addEventListener('change', async function(e) {
+  const files = Array.from(e.target.files || []);
+  if (!files.length) return;
+  parsedBatchSongs = [];
+  skippedBatchDuplicates = 0;
+  try {
+    const results = await Promise.all(files.map(readDocxFile));
+    const existingTitles = new Set(songs.map(song => normalizeImportedTitle(song.title)));
+    const batchTitles = new Set();
+    let totalFound = 0;
+    results.forEach(result => {
+      totalFound += result.songs.length;
+      result.songs.forEach(song => {
+        const key = normalizeImportedTitle(song.title);
+        if (!key || existingTitles.has(key) || batchTitles.has(key)) {
+          skippedBatchDuplicates++;
           return;
         }
-
-        $('batchSummary').textContent = `${parsedBatchSongs.length} louvor(es) encontrado(s) no arquivo Word:`;
-        const listDiv = $('batchList');
-        listDiv.innerHTML = '';
-        parsedBatchSongs.forEach((s, idx) => {
-          const item = document.createElement('div');
-          item.className = 'batch-item';
-          item.innerHTML = `<span><strong>${idx + 1}.</strong> ${esc(s.title)}</span><small style="color:var(--muted)">${s.lines.length} linhas</small>`;
-          listDiv.appendChild(item);
-        });
-
-        $('batchModal').classList.remove('hide');
-        $('docxInput').value = '';
-      })
-      .catch(function(err) {
-        alert('Erro ao ler o arquivo Word: ' + err.message);
+        batchTitles.add(key);
+        parsedBatchSongs.push(song);
       });
-  };
-  reader.readAsArrayBuffer(file);
+    });
+
+    if (parsedBatchSongs.length === 0) {
+      alert(totalFound
+        ? 'Nenhum louvor novo para importar. Os louvores encontrados já existem no catálogo ou estão repetidos nos arquivos selecionados.'
+        : 'Nenhum louvor foi identificado nos arquivos Word selecionados.');
+      return;
+    }
+
+    $('batchSummary').textContent = `${parsedBatchSongs.length} louvor(es) novo(s) encontrado(s) em ${files.length} arquivo(s) Word${skippedBatchDuplicates ? `; ${skippedBatchDuplicates} repetido(s) será(ão) ignorado(s)` : ''}:`;
+    const listDiv = $('batchList');
+    listDiv.innerHTML = '';
+    parsedBatchSongs.forEach((song, idx) => {
+      const item = document.createElement('div');
+      item.className = 'batch-item';
+      item.innerHTML = `<span><strong>${idx + 1}.</strong> ${esc(song.title)}</span><small style="color:var(--muted)">${song.lines.length} linhas</small>`;
+      listDiv.appendChild(item);
+    });
+    $('batchModal').classList.remove('hide');
+  } catch (err) {
+    alert('Erro ao ler os arquivos Word: ' + (err.message || err));
+  } finally {
+    $('docxInput').value = '';
+  }
 });
 
 $('cancelBatch').addEventListener('click', () => {
   $('batchModal').classList.add('hide');
   parsedBatchSongs = [];
+  skippedBatchDuplicates = 0;
 });
 
 $('confirmBatch').addEventListener('click', () => {
@@ -397,15 +425,17 @@ $('confirmBatch').addEventListener('click', () => {
     });
   });
 
+  sortSongsAlphabetically();
   if (persistCatalog()) {
     renderCatalog();
     $('batchModal').classList.add('hide');
-    alert(`${parsedBatchSongs.length} louvores cadastrados com sucesso!`);
+    alert(`${parsedBatchSongs.length} louvores cadastrados com sucesso!${skippedBatchDuplicates ? `\n${skippedBatchDuplicates} repetido(s) foi/foram ignorado(s).` : ''}`);
     parsedBatchSongs = [];
+    skippedBatchDuplicates = 0;
   }
 });
 
-$('saveSong').addEventListener('click',()=>{const title=$('songName').value.trim();const body=$('songLyrics').value.replace(/\r/g,'').trim();if(!title){alert('Digite o nome.');return;}if(!body){alert('Digite a letra.');return;}const lines=body.split('\n');if(editingSongId!==null){const i=songs.findIndex(s=>s.id===editingSongId);if(i>=0)songs[i]={...songs[i],title:title.toLocaleUpperCase('pt-BR'),lines};if(selected&&selected.id===editingSongId)selected=songs[i];}else{const id=songs.reduce((m,s)=>Math.max(m,Number(s.id)||0),-1)+1;const number=songs.reduce((m,s)=>Math.max(m,Number(s.number)||0),0)+1;songs.push({id,number,title:title.toLocaleUpperCase('pt-BR'),lines});}if(!persistCatalog())return;closeSongForm();renderCatalog();if(selected&&!$('viewer').classList.contains('hide')){const index=songs.findIndex(s=>s.id===selected.id);if(index>=0){selected=songs[index];renderSong();}}alert('Salvo com sucesso!');});
+$('saveSong').addEventListener('click',()=>{const title=$('songName').value.trim();const body=$('songLyrics').value.replace(/\r/g,'').trim();if(!title){alert('Digite o nome.');return;}if(!body){alert('Digite a letra.');return;}const lines=body.split('\n');if(editingSongId!==null){const i=songs.findIndex(s=>s.id===editingSongId);if(i>=0)songs[i]={...songs[i],title:title.toLocaleUpperCase('pt-BR'),lines};if(selected&&selected.id===editingSongId)selected=songs[i];}else{const id=songs.reduce((m,s)=>Math.max(m,Number(s.id)||0),-1)+1;const number=songs.reduce((m,s)=>Math.max(m,Number(s.number)||0),0)+1;songs.push({id,number,title:title.toLocaleUpperCase('pt-BR'),lines});}sortSongsAlphabetically();if(selected&&selected.id===editingSongId){const updatedIndex=songs.findIndex(s=>s.id===editingSongId);if(updatedIndex>=0)selected=songs[updatedIndex];}if(!persistCatalog())return;closeSongForm();renderCatalog();if(selected&&!$('viewer').classList.contains('hide')){const index=songs.findIndex(s=>s.id===selected.id);if(index>=0){selected=songs[index];renderSong();}}alert('Salvo com sucesso!');});
 $('editSong').addEventListener('click',()=>{if(selected)openSongForm(selected);});
 $('deleteSong').addEventListener('click',()=>{if(!selected)return;if(!confirm('Excluir o louvor “'+selected.title+'”?'))return;songs=songs.filter(s=>s.id!==selected.id);favorites.delete(selected.id);saveFavorites();persistCatalog();selected=null;$('viewer').classList.add('hide');$('catalog').classList.remove('hide');renderCatalog();});
 $('songModal').addEventListener('click',e=>{if(e.target===$('songModal'))closeSongForm();});
