@@ -298,7 +298,22 @@ function renderCatalog(){
  alphabet.forEach(letter=>{
   let b=document.createElement('button');b.type='button';b.textContent=letter;b.disabled=!groups.has(letter);
   b.setAttribute('aria-label',groups.has(letter)?'Ir para louvores com a letra '+letter:'Nenhum louvor com a letra '+letter);
-  b.onclick=()=>{let target=list.querySelector('[data-letter="'+letter+'"]');if(target)target.scrollIntoView({block:'start',behavior:'smooth'});};nav.appendChild(b);
+  b.onclick=()=>{
+   const target=list.querySelector('[data-letter="'+letter+'"]');
+   if(!target)return;
+   // Mede a posição natural do cabeçalho, sem o efeito sticky que pode
+   // manter cabeçalhos anteriores presos ao topo durante a rolagem.
+   const oldPosition=target.style.position;
+   const oldTop=target.style.top;
+   target.style.position='static';
+   target.style.top='auto';
+   const listRect=list.getBoundingClientRect();
+   const targetRect=target.getBoundingClientRect();
+   const destination=list.scrollTop+(targetRect.top-listRect.top)-list.clientTop-4;
+   target.style.position=oldPosition;
+   target.style.top=oldTop;
+   list.scrollTo({top:Math.max(0,destination),behavior:'smooth'});
+  };nav.appendChild(b);
  });
  groups.forEach((items,letter)=>{
   let heading=document.createElement('div');heading.className='song-group-title';heading.textContent=letter;heading.dataset.letter=letter;list.appendChild(heading);
