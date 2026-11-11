@@ -104,6 +104,17 @@ button.action{border:0;border-radius:12px;padding:13px 10px;background:var(--acc
 #lyrics.adjust-chords .chord-token.dragging{cursor:grabbing;background:var(--accent-soft);z-index:5}
 #lyrics.edit-mode .line:not(.chords){outline:1px dashed var(--accent);outline-offset:2px;border-radius:3px;cursor:text}
 #lyrics.edit-mode .chord-token{cursor:pointer;outline:1px dashed var(--chord);outline-offset:2px;border-radius:3px}
+
+/* Tom na cor do banner; títulos das partes em preto, sem fundo ou faixa */
+.line.tom-heading{color:var(--accent);font-weight:800}
+.line.section-heading{color:#000;font-weight:800}
+
+
+/* Ajustar cifras no mesmo estilo de cor dos controles Editar e Tom */
+.focus-keybar #moveChordsToggle,
+.focus-keybar #moveChordsToggle.moving{height:34px;min-height:34px;padding:0 9px;border:0;border-radius:8px;background:var(--panel2);color:var(--text);font-weight:800;font-size:13px;box-shadow:none}
+.focus-keybar #moveChordsToggle:active{background:var(--line);color:var(--text)}
+
 </style></head><body>
 <header>
   <div class="brand">
@@ -552,7 +563,7 @@ $('saveSong').addEventListener('click',()=>{const title=$('songName').value.trim
 $('editSong').addEventListener('click',()=>{if(selected)openSongForm(selected);});
 $('deleteSong').addEventListener('click',()=>{if(!selected)return;if(!confirm('Excluir o louvor “'+selected.title+'”?'))return;songs=songs.filter(s=>s.id!==selected.id);favorites.delete(selected.id);saveFavorites();repertoire.delete(selected.id);saveRepertoire();persistCatalog();selected=null;$('viewer').classList.add('hide');$('catalog').classList.remove('hide');renderCatalog();});
 $('songModal').addEventListener('click',e=>{if(e.target===$('songModal'))closeSongForm();});
-function renderSong(){let lines=currentLines();$('key').textContent=keyFromLines(lines);$('focusSongTitle').textContent=selected.title;$('focusKey').textContent=keyFromLines(lines).replace(/^Tom\s*:/i,'Tom:');let root=$('lyrics');root.style.setProperty('--lyric-zoom',lyricZoom);root.innerHTML='';let previousWasBlank=false;selected.lines.forEach((original,i)=>{const isBlank=!String(original).trim();if(isBlank&&previousWasBlank)return;previousWasBlank=isBlank;let line=lines[i]??original;let div;if(looksLikeChordLine(original)&&!/^\s*Tom\s*:/i.test(original)){div=renderAlignedChordLine(original,shift,i)}else{div=document.createElement('div');div.className='line';div.textContent=line||' ';}root.appendChild(div)});};
+function renderSong(){let lines=currentLines();$('key').textContent=keyFromLines(lines);$('focusSongTitle').textContent=selected.title;$('focusKey').textContent=keyFromLines(lines).replace(/^Tom\s*:/i,'Tom:');let root=$('lyrics');root.style.setProperty('--lyric-zoom',lyricZoom);root.innerHTML='';let previousWasBlank=false;selected.lines.forEach((original,i)=>{const isBlank=!String(original).trim();if(isBlank&&previousWasBlank)return;previousWasBlank=isBlank;let line=lines[i]??original;let div;if(looksLikeChordLine(original)&&!/^\s*Tom\s*:/i.test(original)){div=renderAlignedChordLine(original,shift,i)}else{div=document.createElement('div');div.className='line';if(/^\s*Tom\s*:\s*\S.*$/i.test(original))div.classList.add('section-heading','tom-heading');else if(/^\s*\[(?:pré[- ]?refr[aã]o|refr[aã]o|primeir[ao] parte|segund[ao] parte|intro|ponte|final|instrumental)(?:\s+[^\]]*)?\]\s*$/i.test(original))div.classList.add('section-heading');div.textContent=line||' ';}root.appendChild(div)});};
 
 let touchStartX = null, touchStartY = null;
 $('viewer').addEventListener('touchstart', e => {
